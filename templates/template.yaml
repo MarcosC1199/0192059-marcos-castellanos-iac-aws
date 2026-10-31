@@ -5,7 +5,7 @@ Parameters:
   InstanceDescription:
     Description: Descripcion del servidor web
     Type: String
-    Default: Servidor Web Apache
+    Default: Servidor Web Apache - Version 2
 
   SecurityGroupDescription:
     Description: Security Group Description
@@ -14,7 +14,7 @@ Parameters:
 
 Resources:
 
-  MyInstanceClase:
+  MyInstanceClase2:
     Type: AWS::EC2::Instance
     Properties:
       AvailabilityZone: us-east-1a
@@ -24,9 +24,11 @@ Resources:
         - !GetAtt ServerSecurityGroupClase.GroupId
       Tags:
         - Key: Name
-          Value: EC2-Clase-CF
+          Value: EC2-Clase-CF-V2
         - Key: Proyecto
           Value: Class-CloudFormation
+        - Key: Estudiante
+          Value: Marcos-Castellanos
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -39,11 +41,12 @@ Resources:
           <html lang="es">
           <head>
             <meta charset="UTF-8">
-            <title>Taller CloudFormation</title>
+            <title>Taller CloudFormation - V2</title>
             <style>
-              body { font-family: Arial, sans-serif; background: #1f2937; color: #f9fafb; text-align: center; padding: 50px; }
-              h1 { color: #38bdf8; }
-              .card { background: #374151; display: inline-block; padding: 30px 50px; border-radius: 12px; }
+              body { font-family: Georgia, serif; background: #064e3b; color: #ecfdf5; text-align: center; padding: 50px; }
+              h1 { color: #fbbf24; font-size: 2.5em; }
+              .card { background: #065f46; display: inline-block; padding: 30px 50px; border-radius: 16px; border: 3px solid #fbbf24; }
+              a { color: #fde68a; }
             </style>
           </head>
           <body>
@@ -52,6 +55,7 @@ Resources:
               <h2>Marcos Castellanos - 0192059</h2>
               <p>Ingenieria de Sistemas - Cloud Computing - UFPSO</p>
               <p>Desplegado con CloudFormation y GitHub Actions</p>
+              <p><a href="https://github.com/MarcosC1199/0192059-marcos-castellanos-iac-aws">Ver el repositorio del proyecto</a></p>
             </div>
           </body>
           </html>
@@ -74,12 +78,12 @@ Outputs:
 
   InstanceId:
     Description: ID de la instancia EC2
-    Value: !Ref MyInstanceClase
+    Value: !Ref MyInstanceClase2
 
   PublicIP:
     Description: IP publica de la instancia
-    Value: !GetAtt MyInstanceClase.PublicIp
+    Value: !GetAtt MyInstanceClase2.PublicIp
 
   WebsiteURL:
     Description: URL del sitio web
-    Value: !Sub http://${MyInstanceClase.PublicIp}
+    Value: !Sub http://${MyInstanceClase2.PublicIp}
