@@ -1,0 +1,36 @@
+name: Despliegue de infraestructura AWS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy CloudFormation Stack
+        run: |
+          aws cloudformation deploy \
+            --template-file templates/template.yaml \
+            --stack-name proyecto-web-iac \
+            --no-fail-on-empty-changeset
+
+      - name: Mostrar salidas del Stack
+        run: |
+          aws cloudformation describe-stacks \
+            --stack-name proyecto-web-iac \
+            --query "Stacks[0].Outputs" \
+            --output table
